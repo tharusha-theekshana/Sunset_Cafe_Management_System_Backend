@@ -31,6 +31,10 @@ public class CustomerUserDetailsService implements UserDetailsService{
             throw  new UsernameNotFoundException("User Not Found .... !");
         }
     }
-    
+
+    public com.sunset_cafe.sunset_cafe_backend.Entity.User getUserDetail(){
+        return userDetail;
+    }
+
 
 }

@@ -12,6 +12,8 @@ public interface UserController {
 
     @PostMapping(path = "/signUp")
     ResponseEntity<String> signUp(@RequestBody Map<String,String> requestMap);
+    @PostMapping(path = "/login")
+    ResponseEntity<String> login(@RequestBody Map<String,String> requestMap);
 
 
 }
