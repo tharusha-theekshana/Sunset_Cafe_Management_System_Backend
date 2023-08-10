@@ -25,7 +25,8 @@ public interface UserController {
     ResponseEntity<String> checkToken();
     @PostMapping(path = "/changePassword")
     ResponseEntity<String> changePassword(@RequestBody Map<String,String> requestMap);
-
+    @PostMapping(path = "/forgotPassword")
+    ResponseEntity<String> forgotPassword(@RequestBody Map<String,String> requestMap);
 
 
 }

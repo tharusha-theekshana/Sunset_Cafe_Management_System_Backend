@@ -15,5 +15,8 @@ public class CafeConstants {
     public static final String ACCOUNT_DISABLED = "Account Disabled ... !";
     public static final String INCORRECT_OLD_PASSWORD = "Incorrect Old Password ... !";
     public static final String PASSWORD_UPDATED_SUCCESSFULLY = "Password Update Successfully ... !";
+    public static final String CHECK_YOUR_MAIL_FOR_CREDENTIALS = "Check Your Mail For Credentials ... !";
+    public static final String CREDENTIALS_BY_SUNSET_CAFE = "Credentials by Sunset Cafe.";
+    public static final String EMAIL_NOT_FOUND = "Email Not Found ... !";
 
 }

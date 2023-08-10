@@ -1,5 +1,6 @@
 package com.sunset_cafe.sunset_cafe_backend.Service.Impl;
 
+import com.google.common.base.Strings;
 import com.sunset_cafe.sunset_cafe_backend.Constants.CafeConstants;
 import com.sunset_cafe.sunset_cafe_backend.DTO.UserDTO;
 import com.sunset_cafe.sunset_cafe_backend.Entity.User;
@@ -160,6 +161,22 @@ public class UserServiceImpl implements UserService {
                 return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> forgotPassword(Map<String, String> requestMap) {
+        try {
+            User user = userRepo.findByEmail(requestMap.get("email"));
+            if (!Objects.isNull(user) && !Strings.isNullOrEmpty(user.getEmail())){
+                emailUtils.forgotMail(user.getEmail(),CafeConstants.CREDENTIALS_BY_SUNSET_CAFE,user.getPassword());
+                return CafeUtils.getResponseEntity(CafeConstants.CHECK_YOUR_MAIL_FOR_CREDENTIALS,HttpStatus.OK);
+            }else{
+                return CafeUtils.getResponseEntity(CafeConstants.EMAIL_NOT_FOUND,HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception exception){
             exception.printStackTrace();
         }
         return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
