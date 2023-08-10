@@ -138,4 +138,9 @@ public class UserServiceImpl implements UserService {
             emailUtils.sendSimpleMessage(jwtFilter.getCurrentUser(),CafeConstants.ACCOUNT_DISABLED,"USER:- "+ userEmail +" \n is disabled by \n ADMIN :-" + jwtFilter.getCurrentUser(),allAdmins);
         }
     }
+
+    @Override
+    public ResponseEntity<String> checkToken() {
+        return CafeUtils.getResponseEntity("True", HttpStatus.OK);
+    }
 }

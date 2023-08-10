@@ -21,6 +21,9 @@ public interface UserController {
     ResponseEntity<List<UserDTO>> getAllUsers();
     @PostMapping("/update")
     ResponseEntity<String> update(@RequestBody Map<String,String> requestMap);
+    @GetMapping(path = "/checkToken")
+    ResponseEntity<String> checkToken();
+
 
 
 }
