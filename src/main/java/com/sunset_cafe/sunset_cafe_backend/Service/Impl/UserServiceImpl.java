@@ -1,8 +1,10 @@
 package com.sunset_cafe.sunset_cafe_backend.Service.Impl;
 
 import com.sunset_cafe.sunset_cafe_backend.Constants.CafeConstants;
+import com.sunset_cafe.sunset_cafe_backend.DTO.UserDTO;
 import com.sunset_cafe.sunset_cafe_backend.Entity.User;
 import com.sunset_cafe.sunset_cafe_backend.JWT.CustomerUserDetailsService;
+import com.sunset_cafe.sunset_cafe_backend.JWT.JwtFilter;
 import com.sunset_cafe.sunset_cafe_backend.JWT.JwtUtil;
 import com.sunset_cafe.sunset_cafe_backend.Repository.UserRepo;
 import com.sunset_cafe.sunset_cafe_backend.Service.UserService;
@@ -16,6 +18,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -28,6 +32,8 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
     private final CustomerUserDetailsService customerUserDetailsService;
     private final JwtUtil jwtUtil;
+    private final JwtFilter jwtFilter;
+
     @Override
     public ResponseEntity<String> signUp(Map<String, String> requestMap) {
         log.info("Inside SignUp {}", requestMap);
@@ -88,5 +94,19 @@ public class UserServiceImpl implements UserService {
             exception.printStackTrace();
         }
         return CafeUtils.getResponseEntity(CafeConstants.BAD_CREDENTIALS, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        try {
+            if (jwtFilter.isAdmin()) {
+                return new ResponseEntity<>(userRepo.getAllUsers(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return new ResponseEntity<List<UserDTO>>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

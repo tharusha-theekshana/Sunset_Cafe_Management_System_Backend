@@ -9,6 +9,10 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+
+@NamedQuery(name ="User.getAllUsers" ,query = "select new com.sunset_cafe.sunset_cafe_backend.DTO.UserDTO(u.id,u.name,u.email,u.contactNumber,u.status) from User u where u.role='user'")
+
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
