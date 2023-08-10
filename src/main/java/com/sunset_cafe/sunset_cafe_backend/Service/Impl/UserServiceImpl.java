@@ -143,4 +143,25 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<String> checkToken() {
         return CafeUtils.getResponseEntity("True", HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<String> changePassword(Map<String, String> requestMap) {
+        try {
+            User userObj = userRepo.findByEmail(jwtFilter.getCurrentUser());
+            if (!userObj.equals(null)){
+                if (userObj.getPassword().equals(requestMap.get("oldPassword"))){
+                    userObj.setPassword(requestMap.get("newPassword"));
+                    userRepo.save(userObj);
+                    return CafeUtils.getResponseEntity(CafeConstants.PASSWORD_UPDATED_SUCCESSFULLY,HttpStatus.OK);
+                }else{
+                    return CafeUtils.getResponseEntity(CafeConstants.INCORRECT_OLD_PASSWORD,HttpStatus.BAD_REQUEST);
+                }
+            }else{
+                return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

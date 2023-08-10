@@ -23,6 +23,8 @@ public interface UserController {
     ResponseEntity<String> update(@RequestBody Map<String,String> requestMap);
     @GetMapping(path = "/checkToken")
     ResponseEntity<String> checkToken();
+    @PostMapping(path = "/changePassword")
+    ResponseEntity<String> changePassword(@RequestBody Map<String,String> requestMap);
 
 
 

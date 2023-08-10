@@ -13,5 +13,7 @@ public class CafeConstants {
     public static final String USER_UPDATE_SUCCESSFULLY = "User Update Successfully ... !";
     public static final String ACCOUNT_APPROVED = "Account Approved ... !";
     public static final String ACCOUNT_DISABLED = "Account Disabled ... !";
+    public static final String INCORRECT_OLD_PASSWORD = "Incorrect Old Password ... !";
+    public static final String PASSWORD_UPDATED_SUCCESSFULLY = "Password Update Successfully ... !";
 
 }
