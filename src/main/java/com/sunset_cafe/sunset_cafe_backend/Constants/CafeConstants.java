@@ -8,5 +8,10 @@ public class CafeConstants {
     public static final String REGISTERED_SUCCESS = "User Registered Success ... !";
     public static final String WAIT_FOR_ADMIN_APPROVAL = "Wait For Admin Approval ... !";
     public static final String BAD_CREDENTIALS = "Bad Credentials ... !";
+    public static final String UNAUTHORIZED_ACCESS = "Unauthorized Access ... !";
+    public static final String USER_DOESNT_EXISTS = "User Doesn't Exixts ... !";
+    public static final String USER_UPDATE_SUCCESSFULLY = "User Update Successfully ... !";
+    public static final String ACCOUNT_APPROVED = "Account Approved ... !";
+    public static final String ACCOUNT_DISABLED = "Account Disabled ... !";
 
 }

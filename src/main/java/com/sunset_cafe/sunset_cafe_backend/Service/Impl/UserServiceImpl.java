@@ -9,6 +9,7 @@ import com.sunset_cafe.sunset_cafe_backend.JWT.JwtUtil;
 import com.sunset_cafe.sunset_cafe_backend.Repository.UserRepo;
 import com.sunset_cafe.sunset_cafe_backend.Service.UserService;
 import com.sunset_cafe.sunset_cafe_backend.Utility.CafeUtils;
+import com.sunset_cafe.sunset_cafe_backend.Utility.EmailUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,10 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -33,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final CustomerUserDetailsService customerUserDetailsService;
     private final JwtUtil jwtUtil;
     private final JwtFilter jwtFilter;
+    private final EmailUtils emailUtils;
 
     @Override
     public ResponseEntity<String> signUp(Map<String, String> requestMap) {
@@ -108,5 +107,35 @@ public class UserServiceImpl implements UserService {
             exception.printStackTrace();
         }
         return new ResponseEntity<List<UserDTO>>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> updateUser(Map<String, String> requestMap) {
+        try {
+            if (jwtFilter.isAdmin()) {
+                Optional<User> optional = userRepo.findById(Integer.valueOf(requestMap.get("id")));
+                if (!optional.isEmpty()){
+                    userRepo.updateStatus(requestMap.get("status"), Integer.valueOf(requestMap.get("id")));
+                    sendMailToAllAdmins(requestMap.get("status"),optional.get().getEmail(),userRepo.getAllAdmins());
+                    return CafeUtils.getResponseEntity(CafeConstants.USER_UPDATE_SUCCESSFULLY,HttpStatus.OK);
+                }else{
+                    return CafeUtils.getResponseEntity(CafeConstants.USER_DOESNT_EXISTS, HttpStatus.NOT_FOUND);
+                }
+            } else {
+                return CafeUtils.getResponseEntity(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private void sendMailToAllAdmins(String status, String userEmail, List<String> allAdmins) {
+        allAdmins.remove(jwtFilter.getCurrentUser());
+        if (status != null && status.equalsIgnoreCase("true")){
+            emailUtils.sendSimpleMessage(jwtFilter.getCurrentUser(),CafeConstants.ACCOUNT_APPROVED,"USER:- "+ userEmail +" \n is approved by \n ADMIN :-" + jwtFilter.getCurrentUser(),allAdmins);
+        }else{
+            emailUtils.sendSimpleMessage(jwtFilter.getCurrentUser(),CafeConstants.ACCOUNT_DISABLED,"USER:- "+ userEmail +" \n is disabled by \n ADMIN :-" + jwtFilter.getCurrentUser(),allAdmins);
+        }
     }
 }

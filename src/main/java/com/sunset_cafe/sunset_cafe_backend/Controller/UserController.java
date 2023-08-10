@@ -19,6 +19,8 @@ public interface UserController {
     ResponseEntity<String> login(@RequestBody Map<String,String> requestMap);
     @GetMapping("/getAllUsers")
     ResponseEntity<List<UserDTO>> getAllUsers();
+    @PostMapping("/update")
+    ResponseEntity<String> update(@RequestBody Map<String,String> requestMap);
 
 
 }
