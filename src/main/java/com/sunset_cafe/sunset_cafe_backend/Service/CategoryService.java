@@ -1,0 +1,9 @@
+package com.sunset_cafe.sunset_cafe_backend.Service;
+
+import org.springframework.http.ResponseEntity;
+
+import java.util.Map;
+
+public interface CategoryService {
+    ResponseEntity<String> addNewCategory(Map<String, String> requestMap);
+}
