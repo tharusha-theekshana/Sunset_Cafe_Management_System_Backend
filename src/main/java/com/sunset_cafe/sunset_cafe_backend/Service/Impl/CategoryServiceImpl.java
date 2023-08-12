@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -73,6 +74,30 @@ public class CategoryServiceImpl implements CategoryService {
             exception.printStackTrace();
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+    @Override
+    public ResponseEntity<String> updateCategory(Map<String, String> requestMap) {
+        try {
+            if (jwtFilter.isAdmin()){
+                if (validateCategoryMap(requestMap,true)){
+                    Optional optional = categoryRepo.findById(Integer.valueOf(requestMap.get("id")));
+                    if (!optional.isEmpty()){
+                        categoryRepo.save(getCategoryFromMap(requestMap,true));
+                        return CafeUtils.getResponseEntity(CafeConstants.CATEGORY_UPDATE_SUCCESSFULLY,HttpStatus.OK);
+                    }else{
+                        return CafeUtils.getResponseEntity(CafeConstants.CATEGORY_ID_DOESNT_EXISTS,HttpStatus.NOT_FOUND);
+                    }
+                }
+                return CafeUtils.getResponseEntity(CafeConstants.INVALID_DATA,HttpStatus.BAD_REQUEST);
+            }else{
+                return CafeUtils.getResponseEntity(CafeConstants.UNAUTHORIZED_ACCESS,HttpStatus.UNAUTHORIZED);
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
