@@ -160,4 +160,14 @@ public class ProductServiceImpl implements ProductService {
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<ProductDTO> getProductById(Integer id) {
+        try {
+            return new ResponseEntity<ProductDTO>(productRepo.getProductById(id),HttpStatus.OK);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return new ResponseEntity<>(new ProductDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

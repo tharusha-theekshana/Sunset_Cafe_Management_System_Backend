@@ -22,4 +22,6 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
     Integer updateProductStatus(@Param("status") String status, @Param("id") Integer id);
 
     List<ProductDTO> getProductsByCategory(@Param("id") Integer id);
+
+    ProductDTO getProductById(Integer id);
 }
