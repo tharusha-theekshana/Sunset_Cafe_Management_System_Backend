@@ -1,5 +1,6 @@
 package com.sunset_cafe.sunset_cafe_backend.Service.Impl;
 
+import com.google.common.base.Strings;
 import com.sunset_cafe.sunset_cafe_backend.Constants.CafeConstants;
 import com.sunset_cafe.sunset_cafe_backend.Entity.Category;
 import com.sunset_cafe.sunset_cafe_backend.JWT.JwtFilter;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -57,4 +60,20 @@ public class CategoryServiceImpl implements CategoryService {
         category.setName(requestMap.get("name"));
         return category;
     }
+
+    @Override
+    public ResponseEntity<List<Category>> getAllCategory(String filterValue) {
+        try {
+            if (!Strings.isNullOrEmpty(filterValue) && filterValue.equalsIgnoreCase("true")){
+               return new ResponseEntity<List<Category>>(categoryRepo.getAllCategory(),HttpStatus.OK);
+            }else{
+               return new ResponseEntity<List<Category>>(categoryRepo.findAll(),HttpStatus.OK);
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
 }

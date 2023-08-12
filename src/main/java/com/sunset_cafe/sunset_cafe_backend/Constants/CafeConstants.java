@@ -19,4 +19,5 @@ public class CafeConstants {
     public static final String CREDENTIALS_BY_SUNSET_CAFE = "Credentials by Sunset Cafe.";
     public static final String EMAIL_NOT_FOUND = "Email Not Found ... !";
     public static final String CATEGORY_ADD_SUCCESSFULLY = "Category Add Successfully ... !";
+
 }
