@@ -20,4 +20,6 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
     @Transactional
     @Query(nativeQuery = true,value = "update product set product.status=:status where id=:id")
     Integer updateProductStatus(@Param("status") String status, @Param("id") Integer id);
+
+    List<ProductDTO> getProductsByCategory(@Param("id") Integer id);
 }

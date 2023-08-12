@@ -17,5 +17,10 @@ public class ProductDTO {
     private Integer  categoryId;
     private String categoryName;
 
-
+    public ProductDTO(Integer id, String name, String description, Integer price) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+    }
 }

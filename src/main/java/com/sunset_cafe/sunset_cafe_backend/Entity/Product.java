@@ -10,6 +10,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @NamedQuery(name = "Product.getAllproducts",query = "select new com.sunset_cafe.sunset_cafe_backend.DTO.ProductDTO(p.id,p.name,p.description,p.price,p.status,p.category.id,p.category.name) from Product p")
+@NamedQuery(name = "Product.getProductsByCategory",query = "select new com.sunset_cafe.sunset_cafe_backend.DTO.ProductDTO(p.id,p.name,p.description,p.price) from Product p where p.category.id=:id and p.status='true'")
+
 
 @Entity
 @AllArgsConstructor
