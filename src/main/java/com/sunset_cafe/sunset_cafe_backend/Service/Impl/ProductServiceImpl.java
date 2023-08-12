@@ -88,21 +88,41 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseEntity<String> updateProduct(Map<String, String> requestMap) {
         try {
-            if (jwtFilter.isAdmin()){
-                if (validateProductMap(requestMap,true)){
+            if (jwtFilter.isAdmin()) {
+                if (validateProductMap(requestMap, true)) {
                     Optional<Product> optional = productRepo.findById(Integer.valueOf(requestMap.get("id")));
-                    if (!optional.isEmpty()){
-                        Product product = getProductFromMap(requestMap,true);
+                    if (!optional.isEmpty()) {
+                        Product product = getProductFromMap(requestMap, true);
                         product.setStatus(optional.get().getStatus());
                         productRepo.save(product);
                         return CafeUtils.getResponseEntity(CafeConstants.PRODUCT_UPDATE_SUCCESSFULLY, HttpStatus.OK);
-                    }else{
+                    } else {
                         return CafeUtils.getResponseEntity(CafeConstants.PRODUCT_ID_DOSENT_EXISTS, HttpStatus.BAD_REQUEST);
                     }
-                }else{
+                } else {
                     return CafeUtils.getResponseEntity(CafeConstants.INVALID_DATA, HttpStatus.BAD_REQUEST);
                 }
-            }else{
+            } else {
+                return CafeUtils.getResponseEntity(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> deleteProduct(Integer id) {
+        try {
+            if (jwtFilter.isAdmin()) {
+                Optional<Product> optional = productRepo.findById(id);
+                if (!optional.isEmpty()) {
+                    productRepo.deleteById(id);
+                    return CafeUtils.getResponseEntity(CafeConstants.PRODUCT_DELETE_SUCCESSFULLY, HttpStatus.OK);
+                } else {
+                    return CafeUtils.getResponseEntity(CafeConstants.PRODUCT_ID_DOSENT_EXISTS, HttpStatus.BAD_REQUEST);
+                }
+            } else {
                 return CafeUtils.getResponseEntity(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception exception) {
