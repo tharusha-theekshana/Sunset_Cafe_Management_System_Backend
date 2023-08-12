@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface CategoryRepo extends JpaRepository<Category,Integer> {
 
-    @Query(nativeQuery = true, value = "select * from category")
+    @Query(nativeQuery = true, value = "select * from category where id in (select category_fk from product where status='true')")
     List<Category> getAllCategory();
 
 
