@@ -130,4 +130,24 @@ public class ProductServiceImpl implements ProductService {
         }
         return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<String> updateStatus(Map<String, String> requestMap) {
+        try {
+            if (jwtFilter.isAdmin()) {
+                Optional<Product> optional = productRepo.findById(Integer.valueOf(requestMap.get("id")));
+                if (!optional.isEmpty()){
+                    productRepo.updateProductStatus(requestMap.get("status"),Integer.valueOf(requestMap.get("id")));
+                    return CafeUtils.getResponseEntity(CafeConstants.PRODUCT_STATUS_UPDATE_SUCCESSFULLY, HttpStatus.OK);
+                }else{
+                    return CafeUtils.getResponseEntity(CafeConstants.PRODUCT_ID_DOSENT_EXISTS, HttpStatus.NOT_FOUND);
+                }
+            } else {
+                return CafeUtils.getResponseEntity(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
