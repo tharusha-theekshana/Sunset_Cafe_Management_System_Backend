@@ -22,4 +22,6 @@ public class CafeConstants {
     public static final String CATEGORY_ID_DOESNT_EXISTS = "Category Id Doesn't Exists ... !";
     public static final String CATEGORY_UPDATE_SUCCESSFULLY = "Category Update Successfully ... !";
     public static final String PRODUCT_ADDED_SUCCESSFULLY = "Product Added Successfully ... !";
+    public static final String PRODUCT_ID_DOSENT_EXISTS = "Product Id Doesn't Exists ... !";
+    public static final String PRODUCT_UPDATE_SUCCESSFULLY = "Product Update Successfully ... !";
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             if (jwtFilter.isAdmin()) {
                 if (validateProductMap(requestMap, false)) {
-                    productRepo.save(getProductFromMap(requestMap,false));
+                    productRepo.save(getProductFromMap(requestMap, false));
                     return CafeUtils.getResponseEntity(CafeConstants.PRODUCT_ADDED_SUCCESSFULLY, HttpStatus.OK);
                 } else {
                     return CafeUtils.getResponseEntity(CafeConstants.INVALID_DATA, HttpStatus.BAD_REQUEST);
@@ -64,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = new Product();
         if (isAdd) {
             product.setId(Integer.valueOf(requestMap.get("id")));
-        }else{
+        } else {
             product.setStatus("true");
         }
         product.setName(requestMap.get("name"));
@@ -77,10 +78,36 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
         try {
-            return new ResponseEntity<List<ProductDTO>>(productRepo.getAllproducts(),HttpStatus.OK);
+            return new ResponseEntity<List<ProductDTO>>(productRepo.getAllproducts(), HttpStatus.OK);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> updateProduct(Map<String, String> requestMap) {
+        try {
+            if (jwtFilter.isAdmin()){
+                if (validateProductMap(requestMap,true)){
+                    Optional<Product> optional = productRepo.findById(Integer.valueOf(requestMap.get("id")));
+                    if (!optional.isEmpty()){
+                        Product product = getProductFromMap(requestMap,true);
+                        product.setStatus(optional.get().getStatus());
+                        productRepo.save(product);
+                        return CafeUtils.getResponseEntity(CafeConstants.PRODUCT_UPDATE_SUCCESSFULLY, HttpStatus.OK);
+                    }else{
+                        return CafeUtils.getResponseEntity(CafeConstants.PRODUCT_ID_DOSENT_EXISTS, HttpStatus.BAD_REQUEST);
+                    }
+                }else{
+                    return CafeUtils.getResponseEntity(CafeConstants.INVALID_DATA, HttpStatus.BAD_REQUEST);
+                }
+            }else{
+                return CafeUtils.getResponseEntity(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

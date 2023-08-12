@@ -18,4 +18,7 @@ public interface ProductController {
 
     @GetMapping(path = "/get")
     ResponseEntity<List<ProductDTO>> getAllProducts();
+
+    @PostMapping(path = "/update")
+    ResponseEntity<String> updateProduct(@RequestBody Map<String,String> requestMap);
 }
