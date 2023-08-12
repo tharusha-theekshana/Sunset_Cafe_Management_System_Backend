@@ -1,6 +1,7 @@
 package com.sunset_cafe.sunset_cafe_backend.Service.Impl;
 
 import com.sunset_cafe.sunset_cafe_backend.Constants.CafeConstants;
+import com.sunset_cafe.sunset_cafe_backend.DTO.ProductDTO;
 import com.sunset_cafe.sunset_cafe_backend.Entity.Category;
 import com.sunset_cafe.sunset_cafe_backend.Entity.Product;
 import com.sunset_cafe.sunset_cafe_backend.JWT.JwtFilter;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -42,6 +45,7 @@ public class ProductServiceImpl implements ProductService {
         return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+
     private boolean validateProductMap(Map<String, String> requestMap, boolean validateId) {
         if (requestMap.containsKey("name")) {
             if (requestMap.containsKey("id") && validateId) {
@@ -68,5 +72,15 @@ public class ProductServiceImpl implements ProductService {
         product.setDescription(requestMap.get("description"));
         product.setPrice(Integer.valueOf(requestMap.get("price")));
         return product;
+    }
+
+    @Override
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
+        try {
+            return new ResponseEntity<List<ProductDTO>>(productRepo.getAllproducts(),HttpStatus.OK);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

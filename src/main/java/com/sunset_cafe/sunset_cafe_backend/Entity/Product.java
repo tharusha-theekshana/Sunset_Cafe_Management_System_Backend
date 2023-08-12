@@ -9,6 +9,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+@NamedQuery(name = "Product.getAllproducts",query = "select new com.sunset_cafe.sunset_cafe_backend.DTO.ProductDTO(p.id,p.name,p.description,p.price,p.status,p.category.id,p.category.name) from Product p")
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
