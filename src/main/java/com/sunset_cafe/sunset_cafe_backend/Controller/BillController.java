@@ -2,10 +2,7 @@ package com.sunset_cafe.sunset_cafe_backend.Controller;
 
 import com.sunset_cafe.sunset_cafe_backend.Entity.Bill;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -18,4 +15,8 @@ public interface BillController {
 
     @GetMapping(path = "/getBills")
     ResponseEntity<List<Bill>> getBills();
+
+    @PostMapping(path = "/getPdf")
+    ResponseEntity<byte[]> getPdf(@RequestBody Map<String,Object> requestMap);
+
 }

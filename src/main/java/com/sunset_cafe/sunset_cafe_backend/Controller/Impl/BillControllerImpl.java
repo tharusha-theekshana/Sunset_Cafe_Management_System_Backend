@@ -38,4 +38,15 @@ public class BillControllerImpl implements BillController {
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<byte[]> getPdf(Map<String, Object> requestMap) {
+        try{
+            return billService.getPdf(requestMap);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
 }

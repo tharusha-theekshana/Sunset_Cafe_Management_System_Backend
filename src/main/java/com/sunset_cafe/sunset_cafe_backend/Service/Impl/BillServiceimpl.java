@@ -12,12 +12,13 @@ import com.sunset_cafe.sunset_cafe_backend.Service.BillService;
 import com.sunset_cafe.sunset_cafe_backend.Utility.CafeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.io.IOUtils;
 import org.json.JSONArray;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -189,5 +190,37 @@ public class BillServiceimpl implements BillService {
             exception.printStackTrace();
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<byte[]> getPdf(Map<String, Object> requestMap) {
+        log.info("Inside getPdf : requestMap {}",requestMap);
+        try{
+          byte[] bytes = new byte[0];
+          if (!requestMap.containsKey("uuid") && validateRequestMap(requestMap)){
+              return new ResponseEntity<>(bytes,HttpStatus.BAD_REQUEST);
+          }
+          String filePath = CafeConstants.STORE_LOCATION+"\\"+ (String) requestMap.get("uuid")+ ".pdf";
+          if(CafeUtils.isFileExist(filePath)){
+              bytes = getByteArray(filePath);
+              return new ResponseEntity<>(bytes,HttpStatus.OK);
+          }else{
+              requestMap.put("isGenerated",false);
+              generateReport(requestMap);
+              bytes = getByteArray(filePath);
+              return new ResponseEntity<>(bytes,HttpStatus.OK);
+          }
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
+    private byte[] getByteArray(String filePath) throws Exception{
+        File initialFile = new File(filePath);
+        InputStream inputStream = new FileInputStream(initialFile);
+        byte[] byteArray = IOUtils.toByteArray(inputStream);
+        inputStream.close();
+        return byteArray;
     }
 }
