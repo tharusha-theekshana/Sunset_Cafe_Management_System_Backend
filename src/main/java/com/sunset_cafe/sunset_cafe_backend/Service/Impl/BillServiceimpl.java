@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -173,5 +175,19 @@ public class BillServiceimpl implements BillService {
 
     }
 
-
+    @Override
+    public ResponseEntity<List<Bill>> getBills() {
+        try{
+            List<Bill> bills = new ArrayList<>();
+            if (jwtFilter.isAdmin()){
+                bills = billRepo.getAllBills();
+            }else{
+                bills = billRepo.getBillsByUserName(jwtFilter.getCurrentUser());
+            }
+            return new ResponseEntity<>(bills,HttpStatus.OK);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
