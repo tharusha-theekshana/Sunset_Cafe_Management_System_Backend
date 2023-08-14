@@ -22,6 +22,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -222,5 +223,21 @@ public class BillServiceimpl implements BillService {
         byte[] byteArray = IOUtils.toByteArray(inputStream);
         inputStream.close();
         return byteArray;
+    }
+
+    @Override
+    public ResponseEntity<String> deleteBill(Integer id) {
+       try{
+            Optional optionalBill = billRepo.findById(id);
+            if (!optionalBill.isEmpty()){
+                billRepo.deleteById(id);
+                return CafeUtils.getResponseEntity(CafeConstants.BILL_DELETED_SUCCESSFULLY, HttpStatus.OK);
+            }else{
+                return CafeUtils.getResponseEntity(CafeConstants.BILL_ID_DOESNT_EXISTS, HttpStatus.NOT_FOUND);
+            }
+       }catch (Exception exception){
+           exception.printStackTrace();
+       }
+       return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

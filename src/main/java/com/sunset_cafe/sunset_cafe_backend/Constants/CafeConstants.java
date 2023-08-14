@@ -28,4 +28,6 @@ public class CafeConstants {
     public static final String PRODUCT_STATUS_UPDATE_SUCCESSFULLY = "Product Status Update Successfully ... !";
     public static final String REQUIRED_DATA_NOT_FOUND = "Required Data Not Found ... !";
     public static final String STORE_LOCATION = "C:\\Projects\\My_Real_Projects\\Sunset Cafe Management System\\Bills";
+    public static final String BILL_ID_DOESNT_EXISTS = "Bill Id Doesn't Exists ... !";
+    public static final String BILL_DELETED_SUCCESSFULLY = "Bill Deleted Successfully ... !";
 }
